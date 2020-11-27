@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事欄 - Google Firebase</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <style>
+        a {
+            display: inline-block;
+        }
+
+        .time {
+            font-size: smaller;
+            bottom: 0;
+            color: rgb(250, 117, 8);
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container w-80 border bg-light">
+
+        <h3>記事欄</h3>
+        <div class="form-group">
+            <input type="text" id="message" class="form-control mb-2" placeholder="填寫內容" autofocus>
+            <input type="button" id="btn" class="btn btn-primary" value="加入備忘">
+        </div>
+
+
+        <div class="mt-2">
+            <div class="row">
+                <button id="all" type="button" class="btn btn-outline-success col m-2">全部顯示</button>
+                <button id="notyet" type="button" class="btn btn-outline-success col m-2">已完成</button>
+                <button id="finish" type="button" class="btn btn-outline-success col m-2">未完成</button>
+            </div>
+
+            <ul id="list" class="list-group list-group-flush mt-2 mb-2">
+                <!--             <li class="list-group-item list-group-item-success row">
+                    <span class='content col'> 範例</span>
+                    <span class='time'>&nbsp; &nbsp;2020/10/12，11:29</span>
+                    <a href="#" class="close" data-num=${i}>&times;</a></li>-->
+            </ul>
+        </div>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-firestore.js"></script>
+
+    <script src="scripts/data.js"></script>
+    <script src="scripts/note.js"></script>
+
+</body>
+
+</html>
