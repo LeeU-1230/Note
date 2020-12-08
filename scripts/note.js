@@ -1,17 +1,3 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAlZ7gsMKEVOxCkzWDsQGLxbQ8fm6mt8Zw",
-    authDomain: "test-creat-1ddb9.firebaseapp.com",
-    databaseURL: "https://test-creat-1ddb9.firebaseio.com",
-    projectId: "test-creat-1ddb9",
-    storageBucket: "test-creat-1ddb9.appspot.com",
-    messagingSenderId: "294987352423",
-    appId: "1:294987352423:web:eb162baad1ebe2672dc7c2",
-    measurementId: "G-QHJS638VN1"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-let db = firebase.firestore();
-let ref = db.collection('lists');
 
 let message = document.querySelector('#message');
 let btn = document.querySelector('#btn');
@@ -20,6 +6,7 @@ let content = document.querySelectorAll('content');
 let all = document.getElementById('all');
 let notyet = document.getElementById('notyet');
 let finish = document.getElementById('finish');
+let back = document.getElementById('back');
 
 btn.addEventListener('click', Saving);
 
@@ -32,7 +19,7 @@ function Saving(e) {
     }
 
     let vueId = Math.floor(Date.now());
-    let now = new Date();                                    // 加上新增訊息的日期
+    let now = new Date();                       // 加上新增訊息的日期
     let year = now.getFullYear();
     let month = now.getMonth() + 1;
     let date = now.getDate();
@@ -40,7 +27,7 @@ function Saving(e) {
     let minute = now.getMinutes();
     let second = now.getSeconds();
 
-    let newMessage = {                           // 要記錄的日期  
+    let newMessage = {                           // 要記錄的資訊
         timeCode: now,
         Id: vueId,
         arrt: '',
@@ -57,7 +44,7 @@ function Saving(e) {
 
 function record(msg) {                                    // 保存資料到server
 
-    ref.add({
+    db.collection(login_id).add({
         timeCode: msg.timeCode,
         Id: msg.Id,
         arrt: msg.arrt,
@@ -69,14 +56,14 @@ function record(msg) {                                    // 保存資料到serv
 }
 
 function msg_update(value) {
-    ref.update({                                         // 更新server上的資料
+    db.collection(login_id).update({                                         // 更新server上的資料
         name: value
     })
 }
 
 
 function get_ref() {                                     // 取得server上的資料
-    ref.onSnapshot(function (querySnapshot) {
+    db.collection(login_id).onSnapshot(function (querySnapshot) {
 
         let data = [];
         querySnapshot.forEach(function (doc) {
@@ -110,10 +97,7 @@ function Printing(data) {                                               // 輸�
     list.innerHTML = str;
 }
 
-window.addEventListener('load', function () {         // 載入時..
-    get_ref();
-    all.classList.add('active');
-})
+
 
 all.addEventListener('click', function () {          // 全部項目
     get_ref();
@@ -123,7 +107,7 @@ all.addEventListener('click', function () {          // 全部項目
 })
 
 notyet.addEventListener('click', function (e) {                         // 未完成資料項目
-    ref.where("arrt", "==", "checked").onSnapshot(function (querySnapshot) {
+    db.collection(login_id).where("arrt", "==", "checked").onSnapshot(function (querySnapshot) {
 
         let data = [];
         querySnapshot.forEach(function (doc) {
@@ -142,7 +126,7 @@ notyet.addEventListener('click', function (e) {                         // 未�
 });
 
 finish.addEventListener('click', function (e) {                          // 已完成資料項目
-    ref.where("arrt", "==", "").onSnapshot(function (querySnapshot) {
+    db.collection(login_id).where("arrt", "==", "").onSnapshot(function (querySnapshot) {
 
         let data = [];
         querySnapshot.forEach(function (doc) {
@@ -164,7 +148,7 @@ finish.addEventListener('click', function (e) {                          // 已�
 
 list.addEventListener('dblclick', contentChange);          // 雙擊修改資料內容
 function contentChange(e) {
-    e.preventDefault();                           
+    e.preventDefault();
 
     if (e.target.className === 'col-8 content') {
 
@@ -175,7 +159,7 @@ function contentChange(e) {
             return e.target.textContent;
         }
 
-        ref.where("name", "==", e.target.textContent).get()
+        db.collection(login_id).where("name", "==", e.target.textContent).get()
             .then(function (querySnapshot) {
 
                 let reid;
@@ -189,7 +173,7 @@ function contentChange(e) {
 
             }).then((value) => {
 
-                ref.doc(value).update({
+                db.collection(login_id).doc(value).update({
                     name: `${result}`
                 })
 
@@ -206,7 +190,7 @@ function Delete(e) {
 
         let id = Number(e.target.parentNode.parentNode.id);     // 取得畫面的資料項id
 
-        ref.where("Id", "==", id).get()
+        db.collection(login_id).where("Id", "==", id).get()
             .then(function (querySnapshot) {
 
                 let reid;
@@ -218,7 +202,7 @@ function Delete(e) {
                 return reid
             }).then((value) => {
 
-                ref.doc(value).delete().then(function () {
+                db.collection(login_id).doc(value).delete().then(function () {
                     console.log("Document successfully deleted!");
 
                 })
@@ -228,7 +212,7 @@ function Delete(e) {
     if (e.target.type === 'checkbox') {                                  // 完成的核取方塊
         let index = Number(e.target.parentNode.parentNode.id);
 
-        ref.where("Id", "==", index).get()
+        db.collection(login_id).where("Id", "==", index).get()
             .then(function (querySnapshot) {
 
                 let re_index = [];
@@ -243,13 +227,13 @@ function Delete(e) {
 
                 if (re_index[1] == 'none') {
 
-                    ref.doc(re_index[0]).update({
+                    db.collection(login_id).doc(re_index[0]).update({
                         decoration: 'line-through',
                         arrt: 'checked'
                     })
 
                 } else {
-                    ref.doc(re_index[0]).update({
+                    db.collection(login_id).doc(re_index[0]).update({
                         decoration: 'none',
                         arrt: ''
                     })
@@ -257,6 +241,10 @@ function Delete(e) {
             })
     };
 }
+
+back.addEventListener('click', function (e) {     // 返回登入頁面
+    location.reload()
+})
 
 message.addEventListener('keyup', function (e) {                    // enter輸入
     e.preventDefault();
